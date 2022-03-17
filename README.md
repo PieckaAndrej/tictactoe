@@ -1,2 +1,2 @@
 # tictactoe
-Tic tac toe in java up to 4 players
+Tic tac toe in java for up to 4 players
