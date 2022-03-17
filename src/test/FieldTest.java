@@ -1,6 +1,8 @@
 package test;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 import java.util.HashSet;
 
@@ -46,6 +48,39 @@ class FieldTest {
 		for (int element : neighbours) {
 			System.out.println(element);
 		}
+		
+	}
+	
+	@Test
+	void testIsNeighbour3and0shouldReturnTrue() {
+		int squareNumber = 0;
+		int neighbour = 3;
+		
+		boolean result = field.isNeighbour(squareNumber, neighbour);
+		
+		assertTrue(result);
+		
+	}
+	
+	@Test
+	void testIsNeighbour0and1shouldReturnTrue() {
+		int squareNumber = 0;
+		int neighbour = 1;
+		
+		boolean result = field.isNeighbour(squareNumber, neighbour);
+		
+		assertTrue(result);
+		
+	}
+	
+	@Test
+	void testIsNeighbour2and3shouldReturnFalse() {
+		int squareNumber = 2;
+		int neighbour = 3;
+		
+		boolean result = field.isNeighbour(squareNumber, neighbour);
+		
+		assertFalse(result);
 		
 	}
 

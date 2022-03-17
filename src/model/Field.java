@@ -48,14 +48,25 @@ public class Field {
 	}
 	
 	public boolean isNeighbour(int squareNumber, int neighbour) {
-		boolean retVal = false;
-		HashSet<Integer> neighbours = getNeighbours(squareNumber);
+		int[] offset = {getX(squareNumber) - getX(neighbour),
+				getY(squareNumber) - getY(neighbour)};
 		
-		if (neighbours.contains(neighbour)) {
-			retVal = true;
+		int trueCounter = 0;
+		
+		
+		for (int i = 0; i < offset.length; i++) {
+			switch (offset[i]) {
+			case -1:
+			case 0:
+			case 1:
+				trueCounter++;
+				break;
+			default:
+				break;
+			}
 		}
 		
-		return retVal;
+		return (trueCounter == offset.length);
 	}
 	
 	public int getNoOfEmptyFields() {
@@ -153,7 +164,9 @@ public class Field {
 		return retVal;
 	}
 	
-	private HashSet<Integer> getLongestLineWithSameValues(int squareNumber, int offset) throws IllegalNumberException {
+	private HashSet<Integer> getLongestLineWithSameValues(int squareNumber, int offset) 
+			throws IllegalNumberException {
+		
 		int neighbour = squareNumber + offset;
 
 		int value = getSquareValue(squareNumber);
