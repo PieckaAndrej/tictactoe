@@ -9,13 +9,11 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ComponentEvent;
 import java.awt.event.ComponentListener;
-import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.UIManager;
 import javax.swing.border.EmptyBorder;
@@ -32,7 +30,7 @@ public class Game extends JFrame {
 	private FieldController fieldCtrl;
 	
 	private ArrayList<JButton> buttons;
-	private ArrayList<BufferedImage> buttonImages;
+	private ImageFactory imgFactory;
 	
 	private int width;
 	private int height;
@@ -55,9 +53,13 @@ public class Game extends JFrame {
 		
 		UIManager.put("Button.disabledText", new ColorUIResource(ColorScheme.DESELECT));
 		
-		buttonImages = Images.getPlayerImages(fieldCtrl.getNumberOfPlayers());
+		
 		
 		initGui();
+		
+		int imgSize = width / fieldCtrl.getNumberOfPlayers();
+		imgFactory = new ImageFactory(imgSize, imgSize,
+				fieldCtrl.getNumberOfPlayers());
 		
 	}
 	
@@ -99,17 +101,13 @@ public class Game extends JFrame {
 
 		            @Override
 		            public void componentResized(ComponentEvent arg0) {
-		                int width = contentPanel.getWidth();
-		                int height = contentPanel.getHeight();
-		                
-		                
-		                if (width > height) {
-		                	width = height;
-		                }
+		                int size = getImageSize();
 		                
 		                try {
-		                	btnNewButton_1.setIcon(new ImageIcon(resize(buttonImages.get(
-		                			fieldCtrl.getField().getSquareValue(buttons.indexOf(btnNewButton_1))))));
+		                	imgFactory.setDimensions(size, size);
+		                	
+		                	btnNewButton_1.setIcon(new ImageIcon(imgFactory.getImage(
+		                			fieldCtrl.getField().getSquareValue(buttons.indexOf(btnNewButton_1)))));
 							
 						} catch (IllegalNumberException e) {
 							e.printStackTrace();
@@ -188,10 +186,10 @@ public class Game extends JFrame {
 	}
 	
 	private void setImageIcon(int index) throws IllegalNumberException {
-		buttons.get(index).setIcon(new ImageIcon(resize(buttonImages.get(fieldCtrl.getField().getSquareValue(index)))));
+		buttons.get(index).setIcon(new ImageIcon(imgFactory.getImage(fieldCtrl.getField().getSquareValue(index))));
 	}
 	
-	private BufferedImage resize(BufferedImage img) {
+	private int getImageSize() {
 		int width = contentPanel.getWidth();
         int height = contentPanel.getHeight();
         
@@ -202,7 +200,7 @@ public class Game extends JFrame {
         
         width = (width / fieldCtrl.getSize()) / 2;
         
-        return Images.resize(img, width, width);
+        return width;
 	}
 	
 	private void win(int result, int index) {
